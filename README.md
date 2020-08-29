@@ -1,3 +1,4 @@
+[![PyPI version](https://badge.fury.io/py/choicepy.svg)](https://badge.fury.io/py/choicepy)
 # choicepy
 A python module for social choice
 
