@@ -7,16 +7,17 @@ import itertools
 import string
 
 
-def get_alphabet_firstn(n):
+def get_lexicographic_list(n):
     """
-    get_alphabet_firstn(n)
+    get_lexicographic_list(n)
 
-    Returns the firtst n letters of the alphabet
+    Returns a list that contains the first n lexicographically ordered strings
+        ["a", "b", "c", ..., "z", "aa", "ab", "ac", ...]
 
     Parameters
     ----------
-    n: string
-        number of letters
+    n: int
+       number of strings
 
     Returns 
     -------
@@ -24,9 +25,12 @@ def get_alphabet_firstn(n):
 
     Example
     -------
-    get_alphabet_firstn(3) # returns ['a','b','c']
+    get_lexicographic_list(3) # returns ['a','b','c']
     """
-    return list(string.ascii_lowercase[0:n])
+    repetitions = range(n // 26 + 2)
+    candidate_tuples = itertools.chain.from_iterable(itertools.product(
+        string.ascii_lowercase, repeat=r) for r in repetitions)
+    return list(map(lambda x: "".join(x), candidate_tuples))[1:n + 1]
 
 def mode(elements):
     """
@@ -367,14 +371,18 @@ class Profile():
         self.num_voters = len(self.voters)
         self.set_candidates(sorted(self.voters[0]))
 
-    def set_candidates(self, candidate_list):
-        self.candidates = sorted(candidate_list)
+    def set_candidates(self, candidates):
+        if isinstance(candidates, list):
+            self.candidates = sorted(candidates)
+        elif isinstance(candidates, float): 
+            self.candidates = get_lexicographic_list(candidates)
         self.num_candidates = len(self.candidates)
+
 
     def generate_uniform_voters(self, candidate_list, num_voters):
         self.num_voters = num_voters
         self.set_candidates(candidate_list)
-        self.voters = [random.sample(candidate_list, len(candidate_list)) for voter in range(num_voters)]
+        self.voters = [random.sample(candidate_list, len(self.candidates)) for _ in range(num_voters)]
 
     def generate_mallows_voters(self, candidate_list, num_voters, dispersion_parameter, transformation_parameter=0):
         self.num_voters = num_voters
@@ -583,5 +591,4 @@ class Profile():
 
         if rule == "borda":
             return self.borda()
-
 
