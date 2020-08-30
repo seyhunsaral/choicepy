@@ -374,7 +374,7 @@ class Profile():
     def set_candidates(self, candidates):
         if isinstance(candidates, list):
             self.candidates = sorted(candidates)
-        elif isinstance(candidates, float): 
+        elif isinstance(candidates, float) or isinstance(candidates, int): 
             self.candidates = get_lexicographic_list(candidates)
         self.num_candidates = len(self.candidates)
 
