@@ -7,16 +7,17 @@ import itertools
 import string
 
 
-def get_alphabet_firstn(n):
+def get_lexicographic_list(n):
     """
-    get_alphabet_firstn(n)
+    get_lexicographic_list(n)
 
-    Returns the firtst n letters of the alphabet
+    Returns a list that contains the first n lexicographically ordered strings
+        ["a", "b", "c", ..., "z", "aa", "ab", "ac", ...]
 
     Parameters
     ----------
-    n: string
-        number of letters
+    n: int
+       number of strings
 
     Returns 
     -------
@@ -24,9 +25,12 @@ def get_alphabet_firstn(n):
 
     Example
     -------
-    get_alphabet_firstn(3) # returns ['a','b','c']
+    get_lexicographic_list(3) # returns ['a','b','c']
     """
-    return list(string.ascii_lowercase[0:n])
+    repetitions = range(n // 26 + 2)
+    candidate_tuples = itertools.chain.from_iterable(itertools.product(
+        string.ascii_lowercase, repeat=r) for r in repetitions)
+    return list(map(lambda x: "".join(x), candidate_tuples))[1:n + 1]
 
 def mode(elements):
     """
@@ -368,22 +372,10 @@ class Profile():
         self.set_candidates(sorted(self.voters[0]))
 
     def set_candidates(self, candidates):
-        """
-        Sets candidate list.
-        Parameters
-        ----------
-        candidates: Either a list or an int.
-            If candidates is a list, it just sets self.candidates as this list;
-            if candidates is an int, it will create a list of length candidates with lexicographically ordered strings
-            ("a", "b", "c", ..., "z", "aa", "ab", "ac", ...)
-        """
-        try:
+        if isinstance(candidates, list):
             self.candidates = sorted(candidates)
-        except TypeError:
-            repetitions = range(candidates // 26 + 2)
-            candidate_tuples = itertools.chain.from_iterable(itertools.product(
-                string.ascii_lowercase, repeat=r) for r in repetitions)
-            self.candidates = list(map(lambda x: "".join(x), candidate_tuples))[1:candidates+1]
+        elif isinstance(candidates, float): 
+            self.candidates = get_lexicographic_list(candidates)
         self.num_candidates = len(self.candidates)
 
 
