@@ -367,14 +367,30 @@ class Profile():
         self.num_voters = len(self.voters)
         self.set_candidates(sorted(self.voters[0]))
 
-    def set_candidates(self, candidate_list):
-        self.candidates = sorted(candidate_list)
+    def set_candidates(self, candidates):
+        """
+        Sets candidate list.
+        Parameters
+        ----------
+        candidates: Either a list or an int.
+            If candidates is a list, it just sets self.candidates as this list;
+            if candidates is an int, it will create a list of length candidates with lexicographically ordered strings
+            ("a", "b", "c", ..., "z", "aa", "ab", "ac", ...)
+        """
+        try:
+            self.candidates = sorted(candidates)
+        except TypeError:
+            repetitions = range(candidates // 26 + 2)
+            candidate_tuples = itertools.chain.from_iterable(itertools.product(
+                string.ascii_lowercase, repeat=r) for r in repetitions)
+            self.candidates = list(map(lambda x: "".join(x), candidate_tuples))[1:candidates+1]
         self.num_candidates = len(self.candidates)
+
 
     def generate_uniform_voters(self, candidate_list, num_voters):
         self.num_voters = num_voters
         self.set_candidates(candidate_list)
-        self.voters = [random.sample(candidate_list, len(candidate_list)) for voter in range(num_voters)]
+        self.voters = [random.sample(candidate_list, len(self.candidates)) for _ in range(num_voters)]
 
     def generate_mallows_voters(self, candidate_list, num_voters, dispersion_parameter, transformation_parameter=0):
         self.num_voters = num_voters
@@ -585,9 +601,16 @@ class Profile():
             return self.borda()
 
 
-#my_profile = Profile()
-#my_profile.generate_mallows_voters(list("abcd"), 5, 1, 0)
-#print(my_profile.borda([4, 3, 2, 1]))
-#print(my_profile.borda(my_profile.generate_borda_rule("borda_1")))
-#print(my_profile.borda(my_profile.generate_borda_rule("borda_0")))
-#print(my_profile.borda(my_profile.generate_borda_rule("dowdall")))
+my_profile = Profile()
+my_profile.generate_mallows_voters(list("abcd"), 5, 1, 0)
+print(my_profile.borda([4, 3, 2, 1]))
+print(my_profile.borda(my_profile.generate_borda_rule("borda_1")))
+print(my_profile.borda(my_profile.generate_borda_rule("borda_0")))
+print(my_profile.borda(my_profile.generate_borda_rule("dowdall")))
+my_profile.generate_uniform_voters(list("abcd"),3)
+
+
+my_profile.set_candidates(50)
+print(my_profile.candidates)
+my_profile.set_candidates(list("abcdefghi"))
+print(my_profile.candidates)
