@@ -382,7 +382,7 @@ class Profile():
     def generate_uniform_voters(self, candidate_list, num_voters):
         self.num_voters = num_voters
         self.set_candidates(candidate_list)
-        self.voters = [random.sample(candidate_list, len(self.candidates)) for _ in range(num_voters)]
+        self.voters = [random.sample(self.candidates, len(self.candidates)) for _ in range(num_voters)]
 
     def generate_mallows_voters(self, candidate_list, num_voters, dispersion_parameter, transformation_parameter=0):
         self.num_voters = num_voters
