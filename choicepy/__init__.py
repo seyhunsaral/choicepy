@@ -325,7 +325,7 @@ class Profile():
         voters_printable = str(self.num_candidates) + " candidates, " + str(self.num_voters) + " voters \n"
         voters_printable +="Profile: " + str(self.print_summary()) + "\n"
         if self.num_voters * justify_length <= term_columns:
-            voters_printable += + "\n"
+            voters_printable += "\n"
 
 
             voters_printable += "".join([("[" + str(item) + "]").ljust(justify_length) for item in range(self.num_voters)])
@@ -592,17 +592,3 @@ class Profile():
         if rule == "borda":
             return self.borda()
 
-
-my_profile = Profile()
-my_profile.generate_mallows_voters(list("abcd"), 5, 1, 0)
-print(my_profile.borda([4, 3, 2, 1]))
-print(my_profile.borda(my_profile.generate_borda_rule("borda_1")))
-print(my_profile.borda(my_profile.generate_borda_rule("borda_0")))
-print(my_profile.borda(my_profile.generate_borda_rule("dowdall")))
-my_profile.generate_uniform_voters(list("abcd"),3)
-
-
-my_profile.set_candidates(50)
-print(my_profile.candidates)
-my_profile.set_candidates(list("abcdefghi"))
-print(my_profile.candidates)
