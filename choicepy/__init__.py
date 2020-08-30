@@ -321,7 +321,7 @@ class Profile():
         voters_printable = str(self.num_candidates) + " candidates, " + str(self.num_voters) + " voters \n"
         voters_printable +="Profile: " + str(self.print_summary()) + "\n"
         if self.num_voters * justify_length <= term_columns:
-            voters_printable += + "\n"
+            voters_printable += "\n"
 
 
             voters_printable += "".join([("[" + str(item) + "]").ljust(justify_length) for item in range(self.num_voters)])
