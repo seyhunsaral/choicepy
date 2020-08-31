@@ -54,20 +54,71 @@ After initializing the voters, the candidates do not need to be specified.
 They will be automatically read from the voters preferences.
 
 ### Voting rules
-Decide on a voting rule.
 
 #### dictator rule
+The winning alternative is the top preference of one single designated voter.
+```bash
+dictator(self, dictator_index=None)
+```
+With ```dictator_index``` it can be specified which voter will be the designated one. 
+If this parameter is not set, a voter will be chosen uniformly at random.
 
 #### plurality rule
+The winning alternative is the one that the greatest fraction of voters ranked on top of their preferences.
+It does not need to be unique.
+
+```bash
+plurality(self)
+```
 
 #### majority rule
+The winning alternative is the one that the majority of voters (i.e. at least 50%) ranked on top of their preferences.
+It does not need to be unique.
+
+```bash
+majority(self)
+```
 
 #### approval rule
+Every voter can either approve or disapprove any candidate. 
+The winning alternative is then the candidate that is approved by most of the voters.
+Just as for the other rules, the voters preferences will be represented by ordered lists 
+of alternatives. All candidates up to a certain index will be approved, 
+the rest will be disapproved.
+
+```bash
+approval(self, acceptable_rank=None)
+```
+
+With ```acceptable_rank``` you can specify the index up to which candidates are approved. 
+If this parameter is not set, an index will be generated uniformly at random 
+for every voter independently.
 
 #### Condorcet rule
+The winning alternative is the candidate that wins against every other candidate 
+in pairwise comparisons.
+```bash
+condorcet(self)
+```
 
 #### Borda rule
+Every preference of a voter is assigned a score. 
+The winning alternative is the candidate with the highest sum of scores.
+```bash
+borda(self, points_list=None)
+```
+The parameter ```points_list``` specifies the scoring. 
+If it is not set, the default scoring [n-1,n-2,...,0], where n is the number of alternatives.
+It can be set using the output of the following method:
 
+```bash
+generate_borda_rule(self, point_distribution)
+```
+The parameter ```point_distribution``` can be set to one of the following strings 
+indicating the scoring method:
+1) ```"borda_0"```
+2) ```"borda_1"```
+3) ```"dowdall```
 
 ## Example 
 
