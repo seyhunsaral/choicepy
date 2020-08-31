@@ -1,10 +1,10 @@
-import random
+import itertools
 import os
+import random
+import string
+from collections import Counter
 
 import numpy as np
-from collections import Counter
-import itertools
-import string
 
 
 def get_lexicographic_list(n):
@@ -31,6 +31,7 @@ def get_lexicographic_list(n):
     candidate_tuples = itertools.chain.from_iterable(itertools.product(
         string.ascii_lowercase, repeat=r) for r in repetitions)
     return list(map(lambda x: "".join(x), candidate_tuples))[1:n + 1]
+
 
 def mode(elements):
     """
@@ -100,8 +101,8 @@ def ranking_distance(rnkA, rnkB, method="kendalltau"):
     available_methods = {"kendalltau"}
 
     if method not in available_methods:
-        raise ValueError("methods: please choose correct measure. \n Available measures:" + str(available_methods)) 
-        
+        raise ValueError("methods: please choose correct measure. \n Available measures:" + str(available_methods))
+
     candidates = sorted(rnkA)
     pairwise_comparisions = itertools.combinations(candidates, 2)
 
@@ -114,21 +115,21 @@ def ranking_distance(rnkA, rnkB, method="kendalltau"):
             if compA != compB:
                 distance += 1
         return distance
+
+
 # kendall tau
 # stackexchange
 # https://stats.stackexchange.com/questions/168602/whats-the-kendall-taus-distance-between-these-2-rankings
 
 
-
-
 def calculate_rank(vector):
-  a={}
-  rank=0
-  for num in sorted(vector):
-    if num not in a:
-      a[num]=rank
-      rank=rank+1
-  return[a[i] for i in vector]
+    a = {}
+    rank = 0
+    for num in sorted(vector):
+        if num not in a:
+            a[num] = rank
+            rank = rank + 1
+    return [a[i] for i in vector]
 
 
 def convert_condensed(voters):
@@ -143,8 +144,9 @@ def convert_condensed(voters):
     """
     return ["".join(voter) for voter in voters]
 
+
 # This is nice, it might be useful
-#list(itertools.combinations(list("abcd"),4))
+# list(itertools.combinations(list("abcd"),4))
 
 
 def all_preferences(candidates, concentrate=False):
@@ -158,15 +160,17 @@ def all_preferences(candidates, concentrate=False):
     else:
         return permutations_list
 
+
 def all_profiles(candidates, num_voters):
-    profile_list = [] 
+    profile_list = []
     prefs = all_preferences(candidates)
-    profile_feed = list(itertools.product(prefs, repeat = num_voters))
+    profile_feed = list(itertools.product(prefs, repeat=num_voters))
 
     for p in profile_feed:
         profile_list.append(Profile(list(p)))
 
     return profile_list
+
 
 def filter_unique(voterlist):
     unique_voter_list = []
@@ -177,13 +181,15 @@ def filter_unique(voterlist):
 
     return unique_voter_list
 
+
 def append_to_profile_list(profile, profile_list):
     for p in profile_list:
         if p == profile:
-            return 
-    
+            return
+
     profile_list.append(profile)
-    
+
+
 def filter_unique_profile(profile_list):
     new_profile_list = []
 
@@ -192,35 +198,40 @@ def filter_unique_profile(profile_list):
 
     return new_profile_list
 
+
 def remove_if_exists(profile, profile_list):
     try:
         profile_list.remove(profile)
     except:
         pass
 
+
 def print_profile_list(profile_list):
     for p in profile_list:
         p.print_full()
 
 
-def generate_mallows_culture_old(true_ordering, sigma, distance_weight = 1, concentrate = False):
-    preferences = all_preferences(true_ordering, concentrate = concentrate)
-    kemeny_distances  = np.array([ranking_distance(p,true_ordering) for p in preferences])
+def generate_mallows_culture_old(true_ordering, sigma, distance_weight=1, concentrate=False):
+    preferences = all_preferences(true_ordering, concentrate=concentrate)
+    kemeny_distances = np.array([ranking_distance(p, true_ordering) for p in preferences])
     kemeny_distances_weighted = kemeny_distances ** distance_weight
-    probabilities = (1/(kemeny_distances_weighted * sum(kemeny_distances_weighted))) * (1-sigma)
-    probabilities[kemeny_distances_weighted == 0] = sigma # replace the zero distance ordering with sigma (assuming there is only one)
+    probabilities = (1 / (kemeny_distances_weighted * sum(kemeny_distances_weighted))) * (1 - sigma)
+    probabilities[
+        kemeny_distances_weighted == 0] = sigma  # replace the zero distance ordering with sigma (assuming there is only one)
     return [list(preferences), list(probabilities)]
-    
+
+
 def get_mallows_normalization_constant(number_of_alternatives, dispersion_parameter):
     # Normalization constant is Z.
     normalization_constant = 1
-    for j in range(1,number_of_alternatives):
-        dispersionoverdistance = [dispersion_parameter ** j for j in range(0,j+1)]
+    for j in range(1, number_of_alternatives):
+        dispersionoverdistance = [dispersion_parameter ** j for j in range(0, j + 1)]
         sum_of_dispersionoverdistance = sum(dispersionoverdistance)
         normalization_constant *= sum_of_dispersionoverdistance
     return normalization_constant
 
-#def get_transformed_mallows_normalization_constant(number_of_alternatives, dispersion_parameter, transformation_parameter):
+
+# def get_transformed_mallows_normalization_constant(number_of_alternatives, dispersion_parameter, transformation_parameter):
 #    # Normalization constant is Z.
 #    normalization_constant = 1
 #    for j in range(1,number_of_alternatives+1):
@@ -230,9 +241,9 @@ def get_mallows_normalization_constant(number_of_alternatives, dispersion_parame
 #    return normalization_constant
 
 def get_transformed_mallows_normalization_constant(dispersion_parameter, transformation_parameter, kemeny_distances):
-    normalization_constant = sum(dispersion_parameter**(k**np.exp(transformation_parameter)) for k in kemeny_distances)
+    normalization_constant = sum(
+        dispersion_parameter ** (k ** np.exp(transformation_parameter)) for k in kemeny_distances)
     return normalization_constant
-
 
 
 def mallows_pdf(distance, number_of_alternatives, dispersion_parameter):
@@ -240,59 +251,64 @@ def mallows_pdf(distance, number_of_alternatives, dispersion_parameter):
     probability = likelihood / get_mallows_normalization_constant(number_of_alternatives, dispersion_parameter)
     return probability
 
-#def transformed_mallows_pdf(distance, number_of_alternatives, dispersion_parameter, transformation_parameter):
+
+# def transformed_mallows_pdf(distance, number_of_alternatives, dispersion_parameter, transformation_parameter):
 #    likelihood = dispersion_parameter ** (distance ** np.exp(transformation_parameter))
 #    probability = likelihood / get_transformed_mallows_normalization_constant(number_of_alternatives, dispersion_parameter, transformation_parameter)
 #    return probability
 
-def transformed_mallows_pdf(distance, number_of_alternatives, dispersion_parameter, transformation_parameter, kemeny_distances):
+def transformed_mallows_pdf(distance, number_of_alternatives, dispersion_parameter, transformation_parameter,
+                            kemeny_distances):
     likelihood = dispersion_parameter ** (distance ** np.exp(transformation_parameter))
-    probability = likelihood / get_transformed_mallows_normalization_constant(dispersion_parameter, transformation_parameter, kemeny_distances)
+    probability = likelihood / get_transformed_mallows_normalization_constant(dispersion_parameter,
+                                                                              transformation_parameter,
+                                                                              kemeny_distances)
     return probability
-    
-    
 
-def generate_mallows_culture(reference_rank, dispersion_parameter, concentrate = False):
+
+def generate_mallows_culture(reference_rank, dispersion_parameter, concentrate=False):
     number_of_alternatives = len(reference_rank)
-    preferences = all_preferences(reference_rank, concentrate = concentrate)
-    kemeny_distances  = np.array([ranking_distance(p, reference_rank) for p in preferences])
+    preferences = all_preferences(reference_rank, concentrate=concentrate)
+    kemeny_distances = np.array([ranking_distance(p, reference_rank) for p in preferences])
     probabilities = [mallows_pdf(d, number_of_alternatives, dispersion_parameter) for d in kemeny_distances]
     return [list(preferences), list(probabilities), list(kemeny_distances)]
 
-def generate_transformed_mallows_culture(reference_rank, dispersion_parameter, transformation_parameter=0, concentrate=False):
+
+def generate_transformed_mallows_culture(reference_rank, dispersion_parameter, transformation_parameter=0,
+                                         concentrate=False):
     number_of_alternatives = len(reference_rank)
-    preferences = all_preferences(reference_rank, concentrate = concentrate)
-    kemeny_distances  = np.array([ranking_distance(p, reference_rank) for p in preferences])
-    probabilities = [transformed_mallows_pdf(d, number_of_alternatives, dispersion_parameter, transformation_parameter, kemeny_distances)
+    preferences = all_preferences(reference_rank, concentrate=concentrate)
+    kemeny_distances = np.array([ranking_distance(p, reference_rank) for p in preferences])
+    probabilities = [transformed_mallows_pdf(d, number_of_alternatives, dispersion_parameter, transformation_parameter,
+                                             kemeny_distances)
                      for d in kemeny_distances]
-    #probabilities = [transformed_mallows_pdf(d, number_of_alternatives, dispersion_parameter, transformation_parameter) for d in kemeny_distances]
+    # probabilities = [transformed_mallows_pdf(d, number_of_alternatives, dispersion_parameter, transformation_parameter) for d in kemeny_distances]
     return [list(preferences), list(probabilities), list(kemeny_distances)]
 
-    
+
 def make_dictionary(pref1, pref2):
     return dict(zip(pref1, pref2))
-    
+
+
 def create_all_mappings(candidates):
-# This creates al mappings from candidate lists. I will use it to generate candidate permutations
+    # This creates al mappings from candidate lists. I will use it to generate candidate permutations
     all_prefs = all_preferences(candidates)
     list_of_mappings = []
 
     for p in all_prefs:
-        list_of_mappings.append(make_dictionary(candidates,p))
-    
+        list_of_mappings.append(make_dictionary(candidates, p))
+
     return list_of_mappings
-    
 
 
 class Profile():
-    
-    def __init__(self, voters = None):
+
+    def __init__(self, voters=None):
         if voters:
             self.set_voters(voters)
         else:
             self.voters = None
             self.candidates = None  # added because of approval voting
-
 
     def __getitem__(self, voter_no):
         return self.voters[voter_no]
@@ -309,62 +325,57 @@ class Profile():
         else:
             raise StopIteration
 
-    def __eq__(self,other):
+    def __eq__(self, other):
         # equality check
         if isinstance(other, list):
             return self.voters == other
 
         if isinstance(other, Profile):
             return self.voters == other.voters
+
     def __str__(self):
-        term_rows, term_columns = list(map(int,(os.popen('stty size', 'r').read().split())))
+        term_rows, term_columns = list(map(int, (os.popen('stty size', 'r').read().split())))
 
         max_length = len(max(self.voters[0], key=len))
         justify_length = max_length + 3
 
         voters_printable = str(self.num_candidates) + " candidates, " + str(self.num_voters) + " voters \n"
-        voters_printable +="Profile: " + str(self.print_summary()) + "\n"
+        voters_printable += "Profile: " + str(self.print_summary()) + "\n"
         if self.num_voters * justify_length <= term_columns:
             voters_printable += "\n"
 
-
-            voters_printable += "".join([("[" + str(item) + "]").ljust(justify_length) for item in range(self.num_voters)])
+            voters_printable += "".join(
+                [("[" + str(item) + "]").ljust(justify_length) for item in range(self.num_voters)])
             voters_printable += "\n"
             for i in range(self.num_candidates):
                 for j in range(self.num_voters):
-
                     voters_printable += self.voters[j][i].ljust(justify_length)
                 voters_printable += "\n"
 
-
         return voters_printable
-        
 
     def __repr__(self):
-       return self.__str__()
+        return self.__str__()
 
     def print_full(self):
-        term_rows, term_columns = list(map(int,(os.popen('stty size', 'r').read().split())))
+        term_rows, term_columns = list(map(int, (os.popen('stty size', 'r').read().split())))
 
         max_length = len(max(self.voters[0], key=len))
         justify_length = max_length + 3
 
         voters_printable = str(self.num_candidates) + " candidates, " + str(self.num_voters) + " voters \n"
-        voters_printable +="Profile: " + str(self.print_summary()) + "\n\n"        
+        voters_printable += "Profile: " + str(self.print_summary()) + "\n\n"
         if True:
 
-            voters_printable += "".join([("[" + str(item) + "]").ljust(justify_length) for item in range(self.num_voters)])
+            voters_printable += "".join(
+                [("[" + str(item) + "]").ljust(justify_length) for item in range(self.num_voters)])
             voters_printable += "\n"
             for i in range(self.num_candidates):
                 for j in range(self.num_voters):
-
                     voters_printable += self.voters[j][i].ljust(justify_length)
                 voters_printable += "\n"
 
-
         print(voters_printable)
-
-
 
     def set_voters(self, voter_list):
         self.voters = voter_list
@@ -374,10 +385,9 @@ class Profile():
     def set_candidates(self, candidates):
         if isinstance(candidates, list):
             self.candidates = sorted(candidates)
-        elif isinstance(candidates, float) or isinstance(candidates, int): 
+        elif isinstance(candidates, float) or isinstance(candidates, int):
             self.candidates = get_lexicographic_list(candidates)
         self.num_candidates = len(self.candidates)
-
 
     def generate_uniform_voters(self, candidate_list, num_voters):
         self.num_voters = num_voters
@@ -387,7 +397,8 @@ class Profile():
     def generate_mallows_voters(self, candidate_list, num_voters, dispersion_parameter, transformation_parameter=0):
         self.num_voters = num_voters
         self.set_candidates(candidate_list)
-        orders, probs, _ = generate_transformed_mallows_culture(candidate_list, dispersion_parameter, transformation_parameter)
+        orders, probs, _ = generate_transformed_mallows_culture(candidate_list, dispersion_parameter,
+                                                                transformation_parameter)
         np_orders = np.array(orders)
         self.voters = np_orders[np.random.choice(len(orders), num_voters, p=probs)].tolist()
 
@@ -403,7 +414,7 @@ class Profile():
             new_voters.append(list(new_voter))
         self.voters = new_voters
 
-    def create_voter_permutations(self, with_myself = False):
+    def create_voter_permutations(self, with_myself=False):
         permutation_list = []
         voter_permutations = list(itertools.permutations(self.voters))
         unique_voter_permutations = filter_unique(voter_permutations)
@@ -418,11 +429,10 @@ class Profile():
         new_voters = np.copy(voters)
         for i in range(np.shape(voters)[0]):
             for j in range(np.shape(voters)[1]):
-                new_voters[i,j] = dictionary[voters[i,j]]
+                new_voters[i, j] = dictionary[voters[i, j]]
         return new_voters.tolist()
 
-
-    def create_candidate_permutations(self, with_myself = False):
+    def create_candidate_permutations(self, with_myself=False):
         permutation_list = []
 
         candidate_permutations = []
@@ -438,7 +448,7 @@ class Profile():
                 permutation_list.append(Profile(list(p)))
         return permutation_list
 
-    def create_vc_permutations(self, with_myself = False):
+    def create_vc_permutations(self, with_myself=False):
         # Combination of both. First gets voters perms then candidate
         permutation_list = []
         final_list = []
@@ -452,12 +462,11 @@ class Profile():
             final_list.extend(profile.create_candidate_permutations())
 
         return permutation_list + final_list
-        
 
     def get_voter(self, voter_index):
         return self.voters[voter_index]
 
-    def get_voters(self, concentrate = False):
+    def get_voters(self, concentrate=False):
         if concentrate:
             return convert_condensed(self.voters)
         else:
@@ -472,9 +481,8 @@ class Profile():
         sortedlist = [k + ":" + str(summary[k]) + " | " for k in sortedkeys]
         return "".join(sortedlist)
 
-
-    def dictator(self, dictator_index = None):
-        #print(self.num_voters)
+    def dictator(self, dictator_index=None):
+        # print(self.num_voters)
         if dictator_index is not None:
             if dictator_index <= self.num_voters:
                 return self.voters[dictator_index][0]
@@ -493,25 +501,24 @@ class Profile():
         top_votes = [self.voters[i][0] for i in range(self.num_voters)]
         counts = Counter(top_votes)
         plurality_winner = max(counts)
-        if counts[plurality_winner] >= (0.5*self.num_voters):
+        if counts[plurality_winner] >= (0.5 * self.num_voters):
             winners.append(plurality_winner)
 
         return winners
 
-    def approval(self, acceptable_rank = None):
+    def approval(self, acceptable_rank=None):
 
         if acceptable_rank is None:
-            acceptable_rank = [random.randint(1, self.num_candidates-1) for iter in range(self.num_voters)]
+            acceptable_rank = [random.randint(1, self.num_candidates - 1) for iter in range(self.num_voters)]
         else:
             acceptable_rank = [acceptable_rank] * self.num_voters
 
         approved_candidates = [self.voters[i][0:acceptable_rank[i]] for i in range(self.num_voters)]
-        approvals = [j for i in approved_candidates for j in i] # concatenate list of lists
-#        print(acceptable_rank)
-#        print(approved_candidates)
+        approvals = [j for i in approved_candidates for j in i]  # concatenate list of lists
+        #        print(acceptable_rank)
+        #        print(approved_candidates)
 
         return mode(approvals)
-
 
     def condorcet(self):
         pairwise_comp_matrix = np.zeros((self.num_candidates, self.num_candidates))
@@ -524,16 +531,16 @@ class Profile():
                     else:
                         comparision = int(voter.index(self.candidates[can1]) < voter.index(self.candidates[can2]))
                         pairwise_comp_matrix[can1, can2] += comparision
-        
-        pairwise_positive_matrix = pairwise_comp_matrix - self.num_voters/2 
+
+        pairwise_positive_matrix = pairwise_comp_matrix - self.num_voters / 2
 
         winners = []
 
         for c, candidate in enumerate(self.candidates):
-            
-            if np.all(np.delete(pairwise_positive_matrix[c,:],c) > 0):
+
+            if np.all(np.delete(pairwise_positive_matrix[c, :], c) > 0):
                 winners.append(candidate)
-        #print(pairwise_comp_matrix)
+        # print(pairwise_comp_matrix)
         return winners
 
     def generate_borda_rule(self, point_distribution):
@@ -554,13 +561,13 @@ class Profile():
             points_list = [1 / i for i in range(1, len(self.candidates) + 1)]
         return points_list
 
-    def borda(self, points_list = None):
+    def borda(self, points_list=None):
         """
         Elects a winner according to the weighted rankings of the voters.
         :param points_list: a list (for example the output of generate_borda_rule(self, point_distribution))
         :return: a string (the name of the winner of the election)
         """
-            
+
         voters = np.array(self.voters)
         if points_list is None:
             points_list = self.generate_borda_rule("borda_0")
@@ -591,4 +598,3 @@ class Profile():
 
         if rule == "borda":
             return self.borda()
-
