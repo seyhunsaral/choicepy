@@ -8,7 +8,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 setuptools.setup(
     name='choicepy',
     python_requires='>3.6.0',
-    version='0.0.1a',
+    version='0.0.1a1',
 	packages=['choicepy'],
     url='https://github.com/seyhunsaral/choicepy',
     license='MIT License',
@@ -17,6 +17,6 @@ setuptools.setup(
     description='A package for social choice and voting',
     long_description=long_description,  # Optional
     long_description_content_type='text/markdown', 
-	install_requires=['numpy>=1.19.1'],
+	install_requires=['numpy>=1.18.5'],
     zip_safe=False
 )
