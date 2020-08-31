@@ -33,7 +33,8 @@ my_profile = choicepy.Profile()
 Voters are represented by their preferences over the candidates, i.e. an electorate
 is a list of lists. Every inner list represents a voter and the elements in this
 list are the candidates sorted according to the preference of the voter.
-You can set the voters using the method set_candidates.
+#### Custom Voter preferences
+You can set the voters using the method set_voters.
 ```python
 my_profile.set_voters([["a", "b", "c"], ["b", "c", "a"]])
 print(my_profile.voters)
@@ -44,6 +45,9 @@ Output:
 [['a', 'b', 'c'], ['b', 'c', 'a']]
 ['a', 'b', 'c']
 ```
+#### Generate Voters from uniform distribution
+
+#### Generate Voters according to Malllows Phi-Model 
     
 ### Candidates
 After initializing the voters, the candidates do not need to be specified.
