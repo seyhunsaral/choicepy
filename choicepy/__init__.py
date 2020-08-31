@@ -334,25 +334,27 @@ class Profile():
             return self.voters == other.voters
 
     def __str__(self):
-        term_rows, term_columns = list(map(int, (os.popen('stty size', 'r').read().split())))
+        if self.voters:
+            term_rows, term_columns = list(map(int, (os.popen('stty size', 'r').read().split())))
 
-        max_length = len(max(self.voters[0], key=len))
-        justify_length = max_length + 3
+            max_length = len(max(self.voters[0], key=len))
+            justify_length = max_length + 3
 
-        voters_printable = str(self.num_candidates) + " candidates, " + str(self.num_voters) + " voters \n"
-        voters_printable += "Profile: " + str(self.print_summary()) + "\n"
-        if self.num_voters * justify_length <= term_columns:
-            voters_printable += "\n"
-
-            voters_printable += "".join(
-                [("[" + str(item) + "]").ljust(justify_length) for item in range(self.num_voters)])
-            voters_printable += "\n"
-            for i in range(self.num_candidates):
-                for j in range(self.num_voters):
-                    voters_printable += self.voters[j][i].ljust(justify_length)
+            voters_printable = str(self.num_candidates) + " candidates, " + str(self.num_voters) + " voters \n"
+            voters_printable += "Profile: " + str(self.print_summary()) + "\n"
+            if self.num_voters * justify_length <= term_columns:
                 voters_printable += "\n"
 
-        return voters_printable
+                voters_printable += "".join(
+                    [("[" + str(item) + "]").ljust(justify_length) for item in range(self.num_voters)])
+                voters_printable += "\n"
+                for i in range(self.num_candidates):
+                    for j in range(self.num_voters):
+                        voters_printable += self.voters[j][i].ljust(justify_length)
+                    voters_printable += "\n"
+            return voters_printable
+        else:
+            return "Empty profile"
 
     def __repr__(self):
         return self.__str__()
