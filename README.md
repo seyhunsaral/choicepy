@@ -129,7 +129,7 @@ import choicepy
 my_profile = choicepy.Profile()
 
 # Generate voters from unform distribution 
-my_profile.generate_uniform_voters(4,10)
+my_profile.generate_uniform_voters(4,9)
 
 # Show profile
 print(my_profile)
