@@ -512,7 +512,7 @@ class Profile():
     def approval(self, acceptable_rank=None):
 
         if acceptable_rank is None:
-            acceptable_rank = [random.randint(1, self.num_candidates - 1) for iter in range(self.num_voters)]
+            acceptable_rank = [random.randint(1, self.num_candidates - 1) for _ in range(self.num_voters)]
         else:
             acceptable_rank = [acceptable_rank] * self.num_voters
 
