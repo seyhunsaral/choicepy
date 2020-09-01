@@ -108,18 +108,22 @@ The winning alternative is the candidate with the highest sum of scores.
 ```bash
 borda(self, points_list=None)
 ```
-The parameter ```points_list``` specifies the scoring. 
-If it is not set, the default scoring [n-1,n-2,...,0], where n is the number of alternatives.
-It can be set using the output of the following method:
+The parameter ```points_list``` specifies the scoring. It takes a list of length n, where n is the 
+number of alternatives. The elements in this list represent the numerical weights the preferences will get, 
+starting with the top-ranked alternative.
+It can be either set manually by specifying a list of numerical values of length n or using the output of 
+the following method:
 
 ```bash
 generate_borda_rule(self, point_distribution)
 ```
 The parameter ```point_distribution``` can be set to one of the following strings 
 indicating the scoring method:
-1) ```"borda_0"```
-2) ```"borda_1"```
-3) ```"dowdall```
+1) ```"borda_0"``` generates the scoring [n-1, n-2, ..., 1, 0] (this scoring is used by default).
+2) ```"borda_1"``` generates the scoring [n, n-1, ..., 2, 1].
+3) ```"dowdall``` generates the scoring [1, 1/2, 1/3, ..., 1/n].
+
+If it is not set, the default scoring [n-1,n-2,...,0] is used, where n is the number of alternatives.
 
 ## Example 
 
