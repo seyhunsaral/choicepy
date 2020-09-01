@@ -47,8 +47,28 @@ Output:
 ['a', 'b', 'c']
 ```
 #### Generate Voters from uniform distribution
+The voters can also be automatically generated according to a uniform distribution over all possible profiles 
+on a given set of candidates. 
+You need to specify the list of candidates and the number of voters first and then call the following method:
+```python
+generate_uniform_voters(self, candidate_list, num_voters)
+```
+#### Generate Voters according to Mallows Phi-Model 
+If there exists an underlying truth which all the voters want to achieve as the outcome of the voting procedure
+but do not know yet   
+In some cases, there exists an underlying truth (reference ranking) which is not known to the voters but all voters agree to 
+have as the outcome of their election. But the voters might not be completely clueless and have a rough idea how the
+true ranking is looking, some of them more, some less.
+Such a situation can be modeled using the Mallows phi-model.
 
-#### Generate Voters according to Malllows Phi-Model 
+```python
+generate_mallows_voters(self, candidate_list, num_voters, dispersion_parameter, transformation_parameter=0)
+```
+The ```dispersion_paramater``` takes a value in the interval (0,1] and determines how clueless the voters are. 
+The lower the value of ```dispersion_parameter```, the higher the probability that a voter has the reference ranking as
+her own preference. As ```dispersion_parameter``` approaches 0, the probability of seeing the reference ranking 
+approaches 1, for ```dispersion_parameter = 1```, the Mallows phi-model is equivalent to a uniform distribution over
+all rankings.
     
 ### Candidates
 After initializing the voters, the candidates do not need to be specified.
