@@ -32,7 +32,8 @@ my_profile = choicepy.Profile()
 ### Voters
 Voters are represented by their preferences over the candidates, i.e. an electorate
 is a list of lists. Every inner list represents a voter and the elements in this
-list are the candidates sorted according to the preference of the voter.
+list are the candidates sorted according to the preference of the voter. We support the case where voters have strict and complete preferences over candidates.
+
 #### Custom Voter preferences
 You can set the voters using the method set_voters.
 ```python
