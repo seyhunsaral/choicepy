@@ -7,8 +7,8 @@ my_profile = choicepy.Profile()
 # print(my_profile.borda(my_profile.generate_borda_rule("borda_0")))
 # print(my_profile.borda(my_profile.generate_borda_rule("dowdall")))
 # my_profile.generate_uniform_voters(list("abcd"),3)
-# 
-# 
+#
+#
 # my_profile.set_candidates(50)
 # print(my_profile.candidates)
 # my_profile.set_candidates(list("abcdefghi"))
