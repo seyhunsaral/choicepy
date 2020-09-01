@@ -176,7 +176,7 @@ def filter_unique(voterlist):
     unique_voter_list = []
 
     for v in voterlist:
-        if not v in unique_voter_list:
+        if v not in unique_voter_list:
             unique_voter_list.append(v)
 
     return unique_voter_list
@@ -217,7 +217,8 @@ def generate_mallows_culture_old(true_ordering, sigma, distance_weight=1, concen
     kemeny_distances_weighted = kemeny_distances ** distance_weight
     probabilities = (1 / (kemeny_distances_weighted * sum(kemeny_distances_weighted))) * (1 - sigma)
     probabilities[
-        kemeny_distances_weighted == 0] = sigma  # replace the zero distance ordering with sigma (assuming there is only one)
+        kemeny_distances_weighted == 0] = sigma  # replace the zero distance ordering with sigma (assuming there is
+    # only one)
     return [list(preferences), list(probabilities)]
 
 
