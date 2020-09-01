@@ -37,7 +37,7 @@ def mode(elements):
     """
     mode(elements)
 
-    Returns the elements with higest number of occurance.
+    Returns the elements with highest number of occurrence.
 
 
     Parameters
@@ -104,11 +104,11 @@ def ranking_distance(rnkA, rnkB, method="kendalltau"):
         raise ValueError("methods: please choose correct measure. \n Available measures:" + str(available_methods))
 
     candidates = sorted(rnkA)
-    pairwise_comparisions = itertools.combinations(candidates, 2)
+    pairwise_comparisons = itertools.combinations(candidates, 2)
 
     if method == "kendalltau":
         distance = 0
-        for c1, c2 in pairwise_comparisions:
+        for c1, c2 in pairwise_comparisons:
             compA = compare(rnkA.index(c1), rnkA.index(c2))
             compB = compare(rnkB.index(c1), rnkB.index(c2))
 
@@ -532,8 +532,8 @@ class Profile():
                     if can1 == can2:
                         pairwise_comp_matrix[can1, can2] = np.nan
                     else:
-                        comparision = int(voter.index(self.candidates[can1]) < voter.index(self.candidates[can2]))
-                        pairwise_comp_matrix[can1, can2] += comparision
+                        comparison = int(voter.index(self.candidates[can1]) < voter.index(self.candidates[can2]))
+                        pairwise_comp_matrix[can1, can2] += comparison
 
         pairwise_positive_matrix = pairwise_comp_matrix - self.num_voters / 2
 
