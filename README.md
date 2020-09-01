@@ -159,7 +159,7 @@ my_profile.condorcet()
 my_profile.approval(2)
 # ['b']
 
-# Show Approval voting outcome (voters approve a random number between 1 and n-1 in their prefernce ordering)
+# Show Approval voting outcome (voters approve the first n of the candidates while n is determined randomly between 1 and number_of_candidates - 1)
 my_profile.approval()
 # ['a','b']
 ```
