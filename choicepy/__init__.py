@@ -305,11 +305,15 @@ def create_all_mappings(candidates):
 class Profile():
 
     def __init__(self, voters=None):
+        self.voters = voters
         if voters:
-            self.set_voters(voters)
+            self.num_voters = len(self.voters)
+            self.candidates = sorted(self.voters[0])
+            self.num_candidates = len(self.candidates)
         else:
-            self.voters = None
-            self.candidates = None  # added because of approval voting
+            self.num_voters = 0
+            self.candidates = None
+            self.num_candidates = 0
 
     def __getitem__(self, voter_no):
         return self.voters[voter_no]
