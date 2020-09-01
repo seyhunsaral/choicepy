@@ -51,7 +51,7 @@ The voters can also be automatically generated according to a uniform distributi
 on a given set of candidates. 
 You need to specify the list of candidates and the number of voters first and then call the following method:
 ```python
-generate_uniform_voters(self, candidate_list, num_voters)
+gen_uniform_voters(self, candidate_list, num_voters)
 ```
 #### Generate Voters according to Mallows Phi-Model 
 If there exists an underlying truth which all the voters want to achieve as the outcome of the voting procedure
@@ -62,7 +62,7 @@ true ranking is looking, some of them more, some less.
 Such a situation can be modeled using the Mallows phi-model.
 
 ```python
-generate_mallows_voters(self, candidate_list, num_voters, dispersion_parameter, transformation_parameter=0)
+gen_mallows_voters(self, candidate_list, num_voters, dispersion_parameter, transformation_parameter=0)
 ```
 The ```dispersion_paramater``` takes a value in the interval (0,1] and determines how clueless the voters are. 
 The lower the value of ```dispersion_parameter```, the higher the probability that a voter has the reference ranking as
@@ -135,7 +135,7 @@ It can be either set manually by specifying a list of numerical values of length
 the following method:
 
 ```bash
-generate_borda_rule(self, point_distribution)
+gen_borda_rule(self, point_distribution)
 ```
 The parameter ```point_distribution``` can be set to one of the following strings 
 indicating the scoring method:
@@ -154,7 +154,7 @@ import choicepy
 my_profile = choicepy.Profile()
 
 # Generate voters from unform distribution 
-my_profile.generate_uniform_voters(4,9)
+my_profile.gen_uniform_voters(4,9)
 
 # Show profile
 print(my_profile)
