@@ -53,7 +53,7 @@ You need to specify the list of candidates and the number of voters first and th
 ```python
 gen_uniform_voters(self, candidate_list, num_voters)
 ```
-#### Generate Voters according to Mallows Phi-Model 
+#### Generate Voters according to Mallows Phi-Model [1]
 If there exists an underlying truth which all the voters want to achieve as the outcome of the voting procedure
 but do not know yet   
 In some cases, there exists an underlying truth (reference ranking) which is not known to the voters but all voters agree to 
@@ -188,3 +188,6 @@ my_profile.approval(2)
 my_profile.approval()
 # ['a','b']
 ```
+
+## References
+[1] : Mallows, Colin L. "Non-null ranking models. I." Biometrika 44.1/2 (1957): 114-130.
