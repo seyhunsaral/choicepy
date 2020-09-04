@@ -341,7 +341,7 @@ def create_all_mappings(candidates):
     return list_of_mappings
 
 
-class Profile():
+class Profile:
 
     def __init__(self, voters=None):
         self.voters = voters
