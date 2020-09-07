@@ -390,6 +390,20 @@ class Profile:
     """
 
     def __init__(self, voters=None):
+        """
+        Parameters
+        ----------
+        voters: list of lists
+            the voters' preferences;
+            every element in the outer list is a strict and complete
+            preference list over the candidates
+        num_voters: int
+            number of voters
+        candidates: list
+            list of candidates
+        num_candidates: int
+            number of candidates
+        """
         self.voters = voters
         if voters:
             self.num_voters = len(self.voters)
