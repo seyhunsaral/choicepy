@@ -342,6 +342,52 @@ def create_all_mappings(candidates):
 
 
 class Profile:
+    """
+    A class used to represent a voting profile.
+
+    Attributes
+    ----------
+    voters: list of lists
+        the voters' preferences;
+        every element in the outer list is a strict and complete
+        preference list over the candidates
+    num_voters: int
+        number of voters
+    candidates: list
+        list of candidates
+    num_candidates: int
+        number of candidates
+
+    Methods
+    -------
+    TODO:
+    profile_string_full()
+    print_full(self)
+    set_voters(voter_list)
+    set_candidates(candidates)
+    gen_uniform_voters(candidate_list, num_voters)
+    gen_mallows_voters(candidate_list,
+                       num_voters,
+                       dispersion_parameter,
+                       transformation_parameter=0)
+    gen_mistaken_truth_voters(candidate_list, num_voters, stdev)
+    create_voter_permutations(with_myself=False)
+    rename_candidates(dictionary)
+    create_candidate_permutations(with_myself=False)
+    create_vc_permutations(with_myself=False)
+    get_voter(voter_index)
+    get_voters(concentrate=False)
+    summarize_voters()
+    print_summary()
+    dictator(dictator_index=None)
+    plurality()
+    majority()
+    approval(acceptable_rank=None)
+    condorcet()
+    gen_borda_rule(point_distribution)
+    borda(points_list=None)
+    elect(rule)
+    """
 
     def __init__(self, voters=None):
         self.voters = voters
