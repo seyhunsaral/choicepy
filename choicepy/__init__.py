@@ -347,13 +347,13 @@ class Profile:
 
     Attributes
     ----------
-    voters: list of lists
+    voters: list of list
         the voters' preferences;
         every element in the outer list is a strict and complete
         preference list over the candidates
     num_voters: int
         number of voters
-    candidates: list
+    candidates: list of str
         list of candidates
     num_candidates: int
         number of candidates
@@ -389,7 +389,7 @@ class Profile:
     elect(rule)
     """
 
-    def __init__(self, voters=None):
+    def __init__(self, voters: list = None):
         """
         Parameters
         ----------
@@ -406,8 +406,8 @@ class Profile:
         """
         self.voters = voters
         if voters:
-            self.num_voters = len(self.voters)
-            self.candidates = sorted(self.voters[0])
+            self.num_voters = len(voters)
+            self.candidates = sorted(voters[0])
             self.num_candidates = len(self.candidates)
         else:
             self.num_voters = 0
