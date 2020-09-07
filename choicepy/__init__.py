@@ -347,13 +347,13 @@ class Profile:
 
     Attributes
     ----------
-    voters: list of list
+    voters: list of lists
         the voters' preferences;
         every element in the outer list is a strict and complete
         preference list over the candidates
     num_voters: int
         number of voters
-    candidates: list of str
+    candidates: list
         list of candidates
     num_candidates: int
         number of candidates
