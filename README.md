@@ -145,6 +145,23 @@ indicating the scoring method:
 
 If it is not set, the default scoring [n-1,n-2,...,0] is used, where n is the number of alternatives.
 
+#### Elect
+
+The method 
+```python
+elect(self, rule)
+``` 
+combines all the previous mentioned voting rules. The parameter ```rule``` can be set to one of the 
+following strings:
+- ```"dictator"```
+- ```"plurality"```
+- ```"approval"```
+- ```"condorcet"```
+- ```"borda"```
+
+and it will just call the respective above mentioned voting rules with their default parameters 
+(this concerns dictator-, approval- and Borda-rule).
+
 ## Example 
 
 ```
