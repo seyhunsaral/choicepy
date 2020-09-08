@@ -717,14 +717,17 @@ class Profile:
         if rule == "dictator":
             return self.dictator()
 
-        if rule == "condorcet":
-            return self.condorcet()
+        if rule == "plurality":
+            return self.plurality()
+
+        if rule == "majority":
+            return self.majority()
 
         if rule == "approval":
             return self.approval()
 
-        if rule == "plurality":
-            return self.plurality()
+        if rule == "condorcet":
+            return self.condorcet()
 
         if rule == "borda":
             return self.borda()

@@ -10,7 +10,8 @@ print(my_profile.borda(my_profile.gen_borda_rule("dowdall")))
 my_profile.gen_uniform_voters(list("abcd"),3)
 #
 #
-my_profile.set_candidates(50)
-print(my_profile.candidates)
-my_profile.set_candidates(list("abcdefghi"))
-print(my_profile.candidates)
+
+rules = ["dictator", "plurality", "majority", "approval", "condorcet", "borda"]
+
+for rule in rules:
+    print(my_profile.elect(rule))

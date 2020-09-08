@@ -155,6 +155,7 @@ combines all the previous mentioned voting rules. The parameter ```rule``` can b
 following strings:
 - ```"dictator"```
 - ```"plurality"```
+- ```"majority"```
 - ```"approval"```
 - ```"condorcet"```
 - ```"borda"```
